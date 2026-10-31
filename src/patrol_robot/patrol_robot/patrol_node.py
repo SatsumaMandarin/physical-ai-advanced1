@@ -63,7 +63,10 @@ class PatrolNode(Node):
             return   # オドメトリがまだ届いていない
 
         name, goal_x, goal_y = self.waypoints[self.index]
-        self.wp_pub.publish(String(data=name))
+        if self.state == 'SCAN':
+            self.wp_pub.publish(String(data=name))
+        else:
+            self.wp_pub.publish(String(data=f'moving_to_{name}'))
         x, y, yaw = self.pose
         cmd = Twist()
 
