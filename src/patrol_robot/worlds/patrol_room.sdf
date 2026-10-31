@@ -71,7 +71,7 @@
     <include>
       <name>person_1</name>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Walking person</uri>
-      <pose>2.0 3.0 0 0 0 3.1416</pose>
+      <pose>4.5 0.0 0 0 0 3.1416</pose>
     </include>
     <!-- 例2：写真パネル（作業C-3で作成） -->
     <!--
