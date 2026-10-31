@@ -1,0 +1,33 @@
+# ROS 2 ビルド生成物
+build/
+install/
+log/
+
+# 外部パッケージ（dependencies.repos で取得）
+src/external/*
+!src/external/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# モデル・記録（フォルダだけ残す）
+models/*
+!models/.gitkeep
+records/*
+!records/.gitkeep
+*.pt
+*.onnx
+
+# 認証情報
+.env
+*.key
+*.pem
+
+# エディタ・OS
+.vscode/*
+!.vscode/settings.json
+.DS_Store
+Thumbs.db
