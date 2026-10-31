@@ -1,0 +1,10 @@
+patrol_node:
+  ros__parameters:
+    waypoint_names: ["WP1", "WP2", "WP3", "WP4"]
+    waypoint_x: [3.0, 3.0, -3.0, -3.0]
+    waypoint_y: [-3.0, 3.0, 3.0, -3.0]
+    linear_speed: 0.3      # 前進速度 [m/s]
+    angular_speed: 0.8     # 旋回速度の上限 [rad/s]
+    goal_tolerance: 0.2    # 到着とみなす距離 [m]
+    scan_time: 8.0         # 各地点で周囲を見る時間 [s]
+    scan_speed: 0.8        # 周囲を見るときの回転速度 [rad/s]（8秒 × 0.8 ≒ 1回転）
