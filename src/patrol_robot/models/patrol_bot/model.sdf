@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <model name="patrol_bot">
+
+    <!-- 胴体 -->
+    <link name="chassis">
+      <pose>0 0 0.12 0 0 0</pose>
+      <inertial>
+        <mass>5.0</mass>
+        <inertia>
+          <ixx>0.0435</ixx><iyy>0.0727</iyy><izz>0.104</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry><box><size>0.4 0.3 0.12</size></box></geometry>
+      </collision>
+      <visual name="visual">
+        <geometry><box><size>0.4 0.3 0.12</size></box></geometry>
+        <material>
+          <ambient>0.1 0.3 0.8 1</ambient>
+          <diffuse>0.1 0.3 0.8 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- カメラの見た目 -->
+      <visual name="camera_visual">
+        <pose>0.19 0 0.09 0 0 0</pose>
+        <geometry><box><size>0.04 0.08 0.05</size></box></geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+        </material>
+      </visual>
+
+      <!-- カメラセンサ -->
+      <sensor name="front_camera" type="camera">
+        <pose>0.21 0 0.09 0 0 0</pose>
+        <always_on>1</always_on>
+        <update_rate>10</update_rate>
+        <visualize>true</visualize>
+        <topic>camera/image_raw</topic>
+        <camera>
+          <horizontal_fov>1.2</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip><near>0.05</near><far>30</far></clip>
+        </camera>
+      </sensor>
+    </link>
+
+    <!-- 左車輪 -->
+    <link name="left_wheel">
+      <pose>0.05 0.18 0.08 -1.5707 0 0</pose>
+      <inertial>
+        <mass>0.5</mass>
+        <inertia>
+          <ixx>0.00087</ixx><iyy>0.00087</iyy><izz>0.0016</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry><cylinder><radius>0.08</radius><length>0.04</length></cylinder></geometry>
+      </collision>
+      <visual name="visual">
+        <geometry><cylinder><radius>0.08</radius><length>0.04</length></cylinder></geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+        </material>
+      </visual>
+    </link>
+
+    <!-- 右車輪 -->
+    <link name="right_wheel">
+      <pose>0.05 -0.18 0.08 -1.5707 0 0</pose>
+      <inertial>
+        <mass>0.5</mass>
+        <inertia>
+          <ixx>0.00087</ixx><iyy>0.00087</iyy><izz>0.0016</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry><cylinder><radius>0.08</radius><length>0.04</length></cylinder></geometry>
+      </collision>
+      <visual name="visual">
+        <geometry><cylinder><radius>0.08</radius><length>0.04</length></cylinder></geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+        </material>
+      </visual>
+    </link>
+
+    <!-- キャスター（摩擦ゼロの球） -->
+    <link name="caster">
+      <pose>-0.15 0 0.04 0 0 0</pose>
+      <inertial>
+        <mass>0.2</mass>
+        <inertia>
+          <ixx>0.000128</ixx><iyy>0.000128</iyy><izz>0.000128</izz>
+          <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry><sphere><radius>0.04</radius></sphere></geometry>
+        <surface>
+          <friction><ode><mu>0.0</mu><mu2>0.0</mu2></ode></friction>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <geometry><sphere><radius>0.04</radius></sphere></geometry>
+      </visual>
+    </link>
+
+    <!-- 関節 -->
+    <joint name="left_wheel_joint" type="revolute">
+      <parent>chassis</parent>
+      <child>left_wheel</child>
+      <axis><xyz>0 0 1</xyz></axis>
+    </joint>
+    <joint name="right_wheel_joint" type="revolute">
+      <parent>chassis</parent>
+      <child>right_wheel</child>
+      <axis><xyz>0 0 1</xyz></axis>
+    </joint>
+    <joint name="caster_joint" type="ball">
+      <parent>chassis</parent>
+      <child>caster</child>
+    </joint>
+
+    <!-- 差動二輪の制御（/cmd_vel を受け取り、/odom を出す） -->
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>0.36</wheel_separation>
+      <wheel_radius>0.08</wheel_radius>
+      <odom_publish_frequency>20</odom_publish_frequency>
+      <topic>cmd_vel</topic>
+      <odom_topic>odom</odom_topic>
+      <frame_id>odom</frame_id>
+      <child_frame_id>chassis</child_frame_id>
+    </plugin>
+
+  </model>
+</sdf>

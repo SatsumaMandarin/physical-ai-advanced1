@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <world name="patrol_room">
+
+    <physics name="2ms" type="ignored">
+      <max_step_size>0.002</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <scene>
+      <ambient>0.6 0.6 0.6 1</ambient>
+      <background>0.8 0.8 0.8 1</background>
+      <shadows>false</shadows>
+    </scene>
+
+    <light type="directional" name="sun">
+      <cast_shadows>false</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- 床 -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><plane><normal>0 0 1</normal><size>20 20</size></plane></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><plane><normal>0 0 1</normal><size>20 20</size></plane></geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 壁（10m × 10m の部屋） -->
+    <model name="walls">
+      <static>true</static>
+      <link name="link">
+        <collision name="north_c"><pose>0 5 0.5 0 0 0</pose><geometry><box><size>10 0.1 1</size></box></geometry></collision>
+        <visual name="north_v"><pose>0 5 0.5 0 0 0</pose><geometry><box><size>10 0.1 1</size></box></geometry></visual>
+        <collision name="south_c"><pose>0 -5 0.5 0 0 0</pose><geometry><box><size>10 0.1 1</size></box></geometry></collision>
+        <visual name="south_v"><pose>0 -5 0.5 0 0 0</pose><geometry><box><size>10 0.1 1</size></box></geometry></visual>
+        <collision name="east_c"><pose>5 0 0.5 0 0 0</pose><geometry><box><size>0.1 10 1</size></box></geometry></collision>
+        <visual name="east_v"><pose>5 0 0.5 0 0 0</pose><geometry><box><size>0.1 10 1</size></box></geometry></visual>
+        <collision name="west_c"><pose>-5 0 0.5 0 0 0</pose><geometry><box><size>0.1 10 1</size></box></geometry></collision>
+        <visual name="west_v"><pose>-5 0 0.5 0 0 0</pose><geometry><box><size>0.1 10 1</size></box></geometry></visual>
+      </link>
+    </model>
+
+    <!-- ロボット（原点・正面が +x 向き） -->
+    <include>
+      <uri>model://patrol_bot</uri>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+
+    <!-- 点検対象（作業Cの結果に応じて追加・変更する） -->
+    <!-- 例1：Gazebo Fuel の人物モデル（初回はダウンロードに時間がかかる） -->
+    <!--
+    <include>
+      <name>person_1</name>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Casual female</uri>
+      <pose>4.0 3.0 0 0 0 3.1416</pose>
+    </include>
+    -->
+    <!-- 例2：写真パネル（作業C-3で作成） -->
+    <!--
+    <include>
+      <name>panel_suitcase</name>
+      <uri>model://photo_panel_suitcase</uri>
+      <pose>4.5 -3.0 0 0 0 0</pose>
+    </include>
+    -->
+
+  </world>
+</sdf>
