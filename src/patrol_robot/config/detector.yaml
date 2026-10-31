@@ -1,0 +1,9 @@
+detector_recorder_node:
+  ros__parameters:
+    model_path: "/ws/models/yolo11n.pt"
+    confidence: 0.4         # これ未満の検出は無視する
+    image_size: 640         # 推論時の画像サイズ（重い場合は 416 や 320 に下げる）
+    infer_rate: 3.0         # 推論の頻度 [Hz]
+    target_classes: ["person", "suitcase", "backpack", "bottle", "chair"]
+    cooldown_sec: 30.0      # 同じ地点・同じクラスを再記録するまでの時間 [s]
+    record_root: "/ws/records"
